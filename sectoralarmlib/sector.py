@@ -103,10 +103,14 @@ class SectorAlarm:
             return "Disarmed"
 
     def GetTemps(self):
+        temps = []
+
         self.Login()
         response = req.get(baseUrl + '/Panel/GetTempratures/' + self.siteid)
 
-        temps = json.loads(response.text)
+        for temp in json.loads(response.text):
+            temps.append((temp["Label"], temp["Temprature"]))
+
 
         return temps
         
