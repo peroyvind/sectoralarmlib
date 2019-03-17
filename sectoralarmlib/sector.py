@@ -14,7 +14,7 @@ class SectorAlarm:
         self.code = panelcode
         self.siteid = siteid
 
-    def login(self):
+    def Login(self):
 
         formdata = 'userID=' + self.username + '&password=' + self.password
 
@@ -37,8 +37,8 @@ class SectorAlarm:
         elif "<title>Sector Alarm</title>" in response.text:
             return "ok"
 
-    def alarmstatus(self):
-        self.login()
+    def AlarmStatus(self):
+        self.Login()
 
         response = req.post(baseUrl + '/Panel/GetOverview/')
 
@@ -47,11 +47,11 @@ class SectorAlarm:
 
         if svar['Panel']['ArmedStatus'] == 'disarmed':
             return "OFF"
-        else
+        else:
             return "ON"
 
-    def arm(self):
-        self.login()
+    def Arm(self):
+        self.Login()
 
         payload = { "ArmCmd":"Total", "PanelCode":self.code, "HasLocks":"false", "id":self.siteid }
 
@@ -73,11 +73,11 @@ class SectorAlarm:
 
         if svar["Status"] != "success":
             raise Exception("Something went wrong while arming the alarm.")
-        else
+        else:
             return "Armed"
 
-    def disarm(self):
-        self.login()
+    def Disarm(self):
+        self.Login()
 
         payload = { "ArmCmd":"Disarm", "PanelCode":self.code, "HasLocks":"false", "id":self.siteid }
 
@@ -99,5 +99,14 @@ class SectorAlarm:
 
         if svar["Status"] != "success":
             raise Exception("Something went wrong while disarming the alarm.")
-        else
+        else:
             return "Disarmed"
+
+    def GetTemps(self):
+        self.Login()
+        response = req.get(baseUrl + '/Panel/GetTempratures/' + self.siteid)
+
+        temps = json.loads(response.text)
+
+        return temps
+        

@@ -8,7 +8,6 @@ setup(
   author = 'Per-Øyvind Bruun',
   author_email = 'per-oyvind.bruun@vitari.no',
   url = 'https://github.com/peroyvind/sectoralarmlib',
-  download_url = 'https://github.com/peroyvind/sectoralarmlib/tarball/0.1',
   keywords = ['sectoralarm'], 
   classifiers = [ 'Programming Language :: Python :: 3.6' ],
   install_requires=[
