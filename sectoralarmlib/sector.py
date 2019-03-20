@@ -97,7 +97,7 @@ class SectorAlarm:
         
         svar = json.loads(response.text)
 
-        if svar["Status"] != "success":
+        if svar["status"] != "success":
             raise Exception("Something went wrong while disarming the alarm.")
         else:
             return "Disarmed"
