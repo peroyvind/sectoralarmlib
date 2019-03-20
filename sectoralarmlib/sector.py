@@ -102,6 +102,33 @@ class SectorAlarm:
         else:
             return "Disarmed"
 
+    def ArmPartial(self):
+        self.Login()
+
+        payload = { "ArmCmd":"Partial", "PanelCode":self.code, "HasLocks":"false", "id":self.siteid }
+
+        headers = {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "en-US,en;q=0.9,sv;q=0.8",
+            "Cache-Control": "max-age=0",
+            "Connection": "keep-alive",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Length": str(sys.getsizeof(payload)),
+            "Upgrade-Insecure-Requests" : '1',
+            "User-Agent" : "Safari/537.36"
+        }
+
+        response = req.post(baseUrl + '/Panel/ArmPanel/', data=payload, headers=headers)
+        
+        svar = json.loads(response.text)
+
+        if svar["status"] != "success":
+            raise Exception("Something went wrong while partial arming the alarm.")
+        else:
+            return "PartialArmed"
+
+
     def GetTemps(self):
         temps = []
 
