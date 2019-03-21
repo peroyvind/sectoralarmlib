@@ -47,7 +47,9 @@ class SectorAlarm:
 
         if svar['Panel']['ArmedStatus'] == 'disarmed':
             return "OFF"
-        else:
+        elif svar['Panel']['ArmedStatus'] == 'partialarmed':
+            return "PARTIAL"
+        else:partialarmed
             return "ON"
 
     def Arm(self):
@@ -71,7 +73,7 @@ class SectorAlarm:
 
         svar = json.loads(response.text)
 
-        if svar["Status"] != "success":
+        if svar["status"] != "success":
             raise Exception("Something went wrong while arming the alarm.")
         else:
             return "Armed"
