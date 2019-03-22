@@ -49,7 +49,7 @@ class SectorAlarm:
             return "OFF"
         elif svar['Panel']['ArmedStatus'] == 'partialarmed':
             return "PARTIAL"
-        else:partialarmed
+        else:
             return "ON"
 
     def Arm(self):
