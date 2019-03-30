@@ -33,7 +33,7 @@ class SectorAlarm:
         response = req.post(baseUrl + '/User/Login?ReturnUrl=%2f', data=formdata, headers=headers)
         
         if "<title>Login</title>" in response.text:
-            raise Exception("Wrong username or password")
+            raise RuntimeError("Wrong username or password")
         elif "<title>Sector Alarm</title>" in response.text:
             return "ok"
 
@@ -74,7 +74,7 @@ class SectorAlarm:
         svar = json.loads(response.text)
 
         if svar["status"] != "success":
-            raise Exception("Something went wrong while arming the alarm.")
+            raise RuntimeError("Something went wrong while arming the alarm.")
         else:
             return "Armed"
 
@@ -100,7 +100,7 @@ class SectorAlarm:
         svar = json.loads(response.text)
 
         if svar["status"] != "success":
-            raise Exception("Something went wrong while disarming the alarm.")
+            raise RuntimeError("Something went wrong while disarming the alarm.")
         else:
             return "Disarmed"
 
@@ -126,7 +126,7 @@ class SectorAlarm:
         svar = json.loads(response.text)
 
         if svar["status"] != "success":
-            raise Exception("Something went wrong while partial arming the alarm.")
+            raise RuntimeError("Something went wrong while partial arming the alarm.")
         else:
             return "PartialArmed"
 
