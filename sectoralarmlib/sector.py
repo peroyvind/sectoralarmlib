@@ -1,10 +1,12 @@
 import requests
 import json
 import sys
+import re
 
 
 baseUrl = "https://mypagesapi.sectoralarm.net"
 req = requests.session()
+version = ''
 
 class SectorAlarm:
 
@@ -35,14 +37,30 @@ class SectorAlarm:
         if "<title>Login</title>" in response.text:
             raise RuntimeError("Wrong username or password")
         elif "<title>Sector Alarm</title>" in response.text:
+            x = re.findall("Scripts\/main.js\?(v.+)\"", response.text)
+            global version
+            version = x[0].split('\"',1)[0]
             return "ok"
-
+            
     def AlarmStatus(self):
         self.Login()
 
-        response = req.post(baseUrl + '/Panel/GetOverview/')
+        payload = { "id": self.siteid, "Version":version  }
 
-        svar = json.loads(response.text)
+        headers = {
+            'Accept': 'application/json, text/plain, */*',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'en-US,en;q=0.9,sv;q=0.8',
+            'Cache-Control': 'max-age=0',
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Content-Length": str(sys.getsizeof(payload)),
+            'Connection': 'keep-alive',
+            'User-Agent' : 'Safari/537.36'
+        }
+
+        response = req.post(baseUrl + '/Panel/GetOverview/', data=json.dumps(payload), headers=headers)
+
+        svar = json.loads(response.text)    
 
 
         if svar['Panel']['ArmedStatus'] == 'disarmed':
@@ -135,7 +153,21 @@ class SectorAlarm:
         temps = []
 
         self.Login()
-        response = req.get(baseUrl + '/Panel/GetTempratures/' + self.siteid)
+
+        payload = { "id": self.siteid, "Version":version  }
+
+        headers = {
+            'Accept': 'application/json, text/plain, */*',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'en-US,en;q=0.9,sv;q=0.8',
+            'Cache-Control': 'max-age=0',
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Content-Length": str(sys.getsizeof(payload)),
+            'Connection': 'keep-alive',
+            'User-Agent' : 'Safari/537.36'
+        }
+
+        response = req.post(baseUrl + '/Panel/GetTempratures/', data=json.dumps(payload), headers=headers)
 
         for temp in json.loads(response.text):
             temps.append((temp["Label"], temp["Temprature"]))
